@@ -56,6 +56,8 @@ jobs:
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
         echo "src-git ssrp https://github.com/fw876/helloworld.git" >> ./feeds.conf.default
+      
+        
         
     - name: Update & Install feeds
       working-directory: ./openwrt
@@ -63,8 +65,13 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         ./scripts/feeds install -a
+        git clone https://github.com/rufengsuixing/luci-app-adguardhome.git package-temp/luci-app-adguardhome
+        mv -f package-temp/luci-app-adguardhome package/lean/
+        git clone https://github.com/vernesong/OpenClash.git package-temp
+        mv -f package-temp/luci-app-openclash package/lean/
+        rm -rf package-temp
+   
 
-        
     #- name: Import external feeds - passwall
     #  working-directory: ./openwrt
     #  run: |

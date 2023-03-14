@@ -115,6 +115,7 @@ jobs:
         PACKAGE_SOC: s905d
         KERNEL_VERSION_NAME: ${{ env.KERNEL_VERSION }}
         WHOAMI: ALEX
+        UPLOAD_FIRMWARE: true
 
     - name: Organize files
       id: organize

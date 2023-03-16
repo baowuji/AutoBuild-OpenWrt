@@ -11,6 +11,8 @@ name: Build_X86
 on: 
   repository_dispatch:
   workflow_dispatch:
+  schedule:
+   - cron: 0 10 * * 5
 permissions:
   contents: write
 jobs:
@@ -108,7 +110,24 @@ jobs:
       with:
         name: OpenWrt
         path: openwrt/bin
-
+    - name: 发布固件
+      uses: ncipollo/release-action@v1
+      with:
+        tag: openwrt_X86_${{ env.PACKAGED_OUTPUTDATE }}
+        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+        allowUpdates: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+        body: |
+          x86固件
+          
+    - name: 清理Actions空间
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          keep_minimum_runs: 0
+          retain_days: 7
+          #retain_days: ${{ github.event.inputs.action_days }}
 
 
 

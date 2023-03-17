@@ -110,8 +110,8 @@ jobs:
     - name: 发布固件
       uses: ncipollo/release-action@v1
       with:
-        tag: openwrt_N1_${{ env.PACKAGED_OUTPUTDATE }}
-        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+        tag: openwrt_X86
+        artifacts: img.gz,.vmdk
         allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |

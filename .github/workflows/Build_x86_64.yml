@@ -20,6 +20,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Clean up AUFS
+      run: |
+        docker system prune -af --volumes
+
     - name: Checkout
       uses: actions/checkout@master
 

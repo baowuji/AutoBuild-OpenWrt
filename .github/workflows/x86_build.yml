@@ -114,31 +114,26 @@ jobs:
       with:
         name: OpenWrt
         path: openwrt/bin
-    - name: 发布固件
-      uses: ncipollo/release-action@v1
-      with:
-        tag: openwrt_X86_${{ env.PACKAGED_OUTPUTDATE }}
-        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-        allowUpdates: true
-        token: ${{ secrets.GITHUB_TOKEN }}
-        body: |
-          x86固件
-          
-    - name: 清理Actions空间
-      uses: Mattraks/delete-workflow-runs@main
-      with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          keep_minimum_runs: 0
-          retain_days: 7
-          #retain_days: ${{ github.event.inputs.action_days }}
-
-
-
-    - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.1.0
-      with:
-        keep_latest: 3
-        delete_tags: true
+    - name: Create Release
+      uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.actions_release }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: Automated OpenWrt build
+        draft: false
+        prerelease: false
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: OpenWrt
+        path: openwrt/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz
+    - name: Delete Old Releases
+      uses: marvinpinto/action-automatic-releases@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        keep-latest: 3
+        delete-previous: true
